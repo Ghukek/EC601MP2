@@ -26,7 +26,7 @@
 # Currently no changes have been made except addition of comments and calls to
 # print()
 
-# Setuup basic neural network to differentiate between types of clothing.
+# Setup basic neural network to differentiate between types of clothing.
 
 # TensorFlow and tf.keras
 import tensorflow as tf
