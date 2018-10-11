@@ -27,14 +27,18 @@ def createarrays(innum, filepath):
             print("Couldn't open: " + imgstr + " skipping.")
             pass
         # Ask if image is of an airplane.
-        labelval = int(input("Is " + imgstr + " an airplane? Input 1 or 0: "))
+        labelval = input("Is " + imgstr + " an airplane? Input 1 or 0: ")
         # Ensure only 0 or 1 are given.
         while True:
+            try:
+                labelval = int(labelval)
+            except:
+                pass
             if labelval == 0 or labelval == 1 or labelval == 3:
                 break
             else:
                 print("Error: input not 0 or 1. Please input 0 for no or 1 for yes.")
-                labelval = int(input("Is " + imgstr + " an airplane? Input 1 or 0: "))
+                labelval = input("Is " + imgstr + " an airplane? Input 1 or 0: ")
         # Notify user of their choice.
         if labelval == 1:
             print("You selected airplane.")
