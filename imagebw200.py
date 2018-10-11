@@ -24,6 +24,7 @@ traindir = "../traindata/"
 
 testnum = 0
 trainnum = 0
+outnum = 0
 
 # Change to input directory.
 
@@ -32,7 +33,13 @@ print("Pulling from: " + os.getcwd())
 
 for filename in os.listdir():
     print("Getting: " + filename)
-    # First decide whether the image will be training or testdata.
+    # Open image.
+    try:
+        curimg = Image.open(filename)
+    except:
+        pass
+
+    # Decide whether the image will be training or testdata.
     if random.uniform(0, 1) > .8:
         outdir = testdir
         testnum = testnum + 1
@@ -41,14 +48,9 @@ for filename in os.listdir():
     else:
         outdir = traindir
         trainnum = trainnum + 1
-        outnum = testnum
+        outnum = trainnum
         print("Will be train picture #" + str(trainnum))
-
-    # Open image.
-    try:
-        curimg = Image.open(filename)
-    except:
-        pass
+    print("Will be picture #" + str(outnum))
     print("Opened: " + filename)
     # Convert to black and white.
     curimg = curimg.convert('L')
