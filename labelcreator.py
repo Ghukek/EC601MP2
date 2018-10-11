@@ -30,35 +30,48 @@ def createarrays(innum, filepath):
         labelval = int(input("Is " + imgstr + " an airplane? Input 1 or 0: "))
         # Ensure only 0 or 1 are given.
         while True:
-            if labelval == 0 or labelval == 1:
+            if labelval == 0 or labelval == 1 or labelval == 3:
                 break
-            # Used for testing without going through entire list of images.
-            elif labelval == 3:
-                return (images, labels)
             else:
                 print("Error: input not 0 or 1. Please input 0 for no or 1 for yes.")
                 labelval = int(input("Is " + imgstr + " an airplane? Input 1 or 0: "))
         # Notify user of their choice.
         if labelval == 1:
             print("You selected airplane.")
+        # Used for testing without going through entire list of images.
+        elif labelval == 3:
+            break
         else:
             print("You selected ship.")
         # Add image and label to corresponding list.
         images.append(temp)
         labels.append(labelval)
 
-    # Convert list to array to fit with appropriate format.
+    print("Did you make any mistakes?")
+    mistake_val = 'y'
+    while True:
+        print("Input 'n' when you have no more mistakes to note.")
+        mistake_val = input("What is the number of the first mistake? ")
+        if mistake_val == 'n':
+            break
+        try:
+            labels[int(mistake_val) - 1] = 1 - labels[int(mistake_val) - 1]
+        except:
+            print("Could not change value. Did you enter a valid number?")
+
+    print(labels)
+
     images = array(images)
-    labels = array(images)
+    labels = array(labels)
 
     return (images, labels)
 
 # First figure out how many files are in the train data.
-trainnum = len(os.listdir(traindir))
+trainnum = len(os.listdir("./traindata/"))
 # Send to the array creator.
 (train_images, train_labels) = createarrays(trainnum, "./traindata/")
 # Repeat for test data.
-testnum = len(os.listdir(testdir))
+testnum = len(os.listdir("./testdata/"))
 (test_images, test_labels) = createarrays(testnum, "./testdata/")
 
 # Show size of resulting arrays.
