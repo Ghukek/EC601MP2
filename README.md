@@ -11,3 +11,11 @@ After manually cropping the photos to focus on the desired subject and give them
 # LabelCreator
 
 This script runs through both train and test folders and asks the user if the corresponding image is an airplane. The user should input 1 if yes, 0 if no. This script will create and save a 3D array of images and a corresponding 1D array of lables. It does not need to be rerun but will work if attempted.
+
+# LayerTester
+
+This script uses a nested loop to create models with 1-10 dense layers with 32-2048 nodes (node count doubled each iteration). It then prints the resulting accuracy sorted by nodecount, then layer count in ascending order. This data is used to generate the test values for the next script. 
+
+# EpochTester
+
+This script tests the best layer/node count values from the LayerTester to figure out how many Epoch's are ideal. The Epoch count ranges from 5-20. It will then print the resulting accuracy. The layer/node/epoch cout result will be used in the main program.
