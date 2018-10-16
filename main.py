@@ -6,78 +6,48 @@ from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 from random import randint
+import loaddata
 
-#print(tf.__version__)
-
-# Import dataset.
-
-train_images = np.load("train_images.npy")
-train_labels = np.load("train_labels.npy")
-test_images = np.load("test_images.npy")
-test_labels = np.load("test_labels.npy")
-
-train_images = train_images.astype(float)
-test_images = test_images.astype(float)
+# Load data.
+[train_images, train_labels, test_images, test_labels] = loaddata.ld()
 
 # Create list of labels.
-
 class_names = ['Ship', 'Airplane']
 
-# Bring values to a range of 0-1.
-
-for i in range(0, len(train_images)):
-  train_images[i] = train_images[i] - np.amin(train_images[i])
-  train_images[i] = train_images[i]/np.amax(train_images[i])
-  if np.average(train_images[i]) > .5:
-    train_images[i] = 1 - train_images[i]
-
-for i in range(0, len(test_images)):
-  test_images[i] = test_images[i] - np.amin(test_images[i])
-  test_images[i] = test_images[i]/np.amax(test_images[i])
-  if np.average(test_images[i]) > .5:
-    test_images[i] = 1 - test_images[i]
-
-# Setup the layers
-
+# Create model.
 model = keras.Sequential()
+
 # This layer turns the image from a 2D array to a 1D array.
 model.add(keras.layers.Flatten(input_shape=(200, 300)))
 
+# Setup itermediate dense layers.
 for i in range(0,12):
     model.add(keras.layers.Dense(256, activation=tf.nn.relu))
 
-# This layer will return an array of 2 probability scores summing to 1.
-# Each node's score reflects the probability that the image belongs to the
-# corresponding class.
+# Final layer for results.
 model.add(keras.layers.Dense(2, activation=tf.nn.softmax))
 
-# Compile with settings.
-
+# Compile
 model.compile(optimizer='Adam', 
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# Send training and test data to the model.
-# Model will train using the training data.
-
+# Train
 model.fit(train_images, train_labels, epochs=15)
 
+# The following code is Copyright (c) 2017 François Chollet
+# More information at bottom.
+# Changes made to the following code include adding plt.show() and
+# Changing the plot data from first 15 to random 15.
+
 # Run test data through the model and print accuracy.
-
 test_loss, test_acc = model.evaluate(test_images, test_labels)
-
 print('Test accuracy:', test_acc)
 
 # Make predictions on images.
-
 predictions = model.predict(test_images)
 
-print(predictions[0])
-print(np.argmax(predictions[0]))
-print(test_labels[0])
-
 # Setup plot functions to plot probability that an image falls in each category.
-
 def plot_image(i, predictions_array, true_label, img):
   predictions_array, true_label, img = predictions_array[i], true_label[i], img[i]
   plt.grid(False)
@@ -124,10 +94,9 @@ for i in range(num_images):
 
 plt.show()
 
-# Some code in this script is taken from 
+# The plotting code was taken from:
 # https://www.tensorflow.org/tutorials/keras/basic_classification
 # The code is under the Creative Commons Attribution 3.0 License.
-# To see the original code, see included example01.py.
 
 # @title MIT License
 #

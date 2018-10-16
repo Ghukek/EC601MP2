@@ -7,6 +7,7 @@
 
 import os
 from PIL import Image
+import imgnum
 
 # Create an array of directories to call from.
 
