@@ -1,32 +1,4 @@
-# Code taken from https://www.tensorflow.org/tutorials/keras/basic_classification
-# The code is under the Creative Commons Attribution 3.0 License.
-
-#@title MIT License
-#
-# Copyright (c) 2017 François Chollet
-#
-# Permission is hereby granted, free of charge, to any person obtaining a
-# copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation
-# the rights to use, copy, modify, merge, publish, distribute, sublicense,
-# and/or sell copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-# DEALINGS IN THE SOFTWARE.
-
-# Currently no changes have been made except addition of comments and calls to
-# print()
-
-# Setup basic neural network to differentiate between types of clothing.
+# Copyright 2018 Nathan Wiebe nwiebe@bu.edu
 
 # TensorFlow and tf.keras
 import tensorflow as tf
@@ -51,33 +23,6 @@ test_images = test_images.astype(float)
 
 class_names = ['Ship', 'Airplane']
 
-# Check dataset size. First number is how many images the dataset contains.
-# Second and third numbers show the size of the images.
-
-print(train_images.shape)
-
-# Check how many labels there are.
-trainlen = len(train_labels)
-print(trainlen)
-
-# Check training dataset labels values.
-
-print(train_labels)
-
-# Repeat for test dataset.
-
-print(test_images.shape)
-testlen = len(test_labels)
-print(testlen)
-
-# Check an image. 
-
-# plt.figure()
-# plt.imshow(train_images[randint(0, testlen - 1)])
-# plt.colorbar()
-# plt.grid(False)
-# plt.show()
-
 # Bring values to a range of 0-1.
 
 for i in range(0, len(train_images)):
@@ -92,37 +37,19 @@ for i in range(0, len(test_images)):
   if np.average(test_images[i]) > .5:
     test_images[i] = 1 - test_images[i]
 
-# plt.figure(figsize=(10,10))
-# for i in range(25):
-#     j = randint(0, trainlen - 1)
-#     plt.subplot(5,5,i+1)
-#     plt.xticks([])
-#     plt.yticks([])
-#     plt.grid(False)
-#     plt.imshow(train_images[j], cmap=plt.cm.binary)
-#     plt.xlabel(class_names[train_labels[j]])
-
-# plt.show()
-
 # Setup the layers
 
-model = keras.Sequential([
-    # This layer turns the image from a 2D array to a 1D array.
-    keras.layers.Flatten(input_shape=(200, 300)),
-    # This layer has 128 nodes.
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(128, activation=tf.nn.relu),
-    # This layer will return an array of 2 probability scores summing to 1.
-    # Each node's score reflects the probability that the image belongs to the
-    # corresponding class.
-    keras.layers.Dense(2, activation=tf.nn.softmax)
-])
+model = keras.Sequential()
+# This layer turns the image from a 2D array to a 1D array.
+model.add(keras.layers.Flatten(input_shape=(200, 300)))
+
+for i in range(0,12):
+    model.add(keras.layers.Dense(256, activation=tf.nn.relu))
+
+# This layer will return an array of 2 probability scores summing to 1.
+# Each node's score reflects the probability that the image belongs to the
+# corresponding class.
+model.add(keras.layers.Dense(2, activation=tf.nn.softmax))
 
 # Compile with settings.
 
@@ -133,7 +60,7 @@ model.compile(optimizer='Adam',
 # Send training and test data to the model.
 # Model will train using the training data.
 
-model.fit(train_images, train_labels, epochs=5)
+model.fit(train_images, train_labels, epochs=15)
 
 # Run test data through the model and print accuracy.
 
@@ -182,29 +109,7 @@ def plot_value_array(i, predictions_array, true_label):
   thisplot[predicted_label].set_color('red')
   thisplot[true_label].set_color('blue')
 
-# # Check first image.
-
-# i = 0
-# plt.figure(figsize=(6,3))
-# plt.subplot(1,2,1)
-# plot_image(i, predictions, test_labels, test_images)
-# plt.subplot(1,2,2)
-# plot_value_array(i, predictions,  test_labels)
-
-# plt.show()
-
-# # Check second image.
-
-# i = 12
-# plt.figure(figsize=(6,3))
-# plt.subplot(1,2,1)
-# plot_image(i, predictions, test_labels, test_images)
-# plt.subplot(1,2,2)
-# plot_value_array(i, predictions,  test_labels)
-
-# plt.show()
-
-# Plot the first X test images, their predicted label, and the true label
+# Plot a random set of 15 test images, their predicted label, and the true label
 # Color correct predictions in blue, incorrect predictions in red
 num_rows = 5
 num_cols = 3
@@ -219,25 +124,29 @@ for i in range(num_images):
 
 plt.show()
 
-# Use model to make a prediction about a single image.
+# Some code in this script is taken from 
+# https://www.tensorflow.org/tutorials/keras/basic_classification
+# The code is under the Creative Commons Attribution 3.0 License.
+# To see the original code, see included example01.py.
 
-# Grab an image from the test dataset
-img = test_images[0]
-
-print(img.shape)
-
-# Add the image to a batch where it's the only member.
-img = (np.expand_dims(img,0))
-
-print(img.shape)
-
-predictions_single = model.predict(img)
-
-print(predictions_single)
-
-# plot_value_array(0, predictions_single, test_labels)
-# _ = plt.xticks(range(10), class_names, rotation=45)
-
-# plt.show()
-
-np.argmax(predictions_single[0])
+# @title MIT License
+#
+# Copyright (c) 2017 François Chollet
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.

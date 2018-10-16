@@ -24,16 +24,16 @@ for i in range(0, len(test_images)):
   if np.average(test_images[i]) > .5:
     test_images[i] = 1 - test_images[i]
 
-layernode = [32, 64, 128, 256, 512, 1024, 2048]
+layernode = [32, 64, 128, 256, 512, 1024]
 accuracylist = {}
 
 for i in range(0, len(layernode)):
-    for j in range(5, 15):
+    for j in range(5, 16):
         print("Nodecount: " + str(layernode[i]) + " Layercount: " + str(j))
         model = keras.Sequential()
         model.add(keras.layers.Flatten(input_shape=(200, 300)))
         for k in range(0, j):
-            model.add(keras.layers.Dense(128, activation=tf.nn.relu))
+            model.add(keras.layers.Dense(layernode[i], activation=tf.nn.relu))
         model.add(keras.layers.Dense(2, activation=tf.nn.softmax))
 
         model.compile(optimizer='Adam', 
@@ -46,6 +46,6 @@ for i in range(0, len(layernode)):
 
         print('Test accuracy:', test_acc)
 
-        accuracylist['node' + str(layernode[i]) + 'layer' + str(j)] = test_acc
+        accuracylist['N' + str(layernode[i]) + 'L' + str(j)] = test_acc
 
 print(accuracylist)

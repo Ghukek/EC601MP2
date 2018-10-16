@@ -14,7 +14,7 @@ This script runs through both train and test folders and asks the user if the co
 
 # LayerTester
 
-This script uses a nested loop to create models with 1-10 dense layers with 32-2048 nodes (node count doubled each iteration). It then prints the resulting accuracy sorted by nodecount, then layer count in ascending order. This data is used to generate the test values for the next script. 
+This script uses a nested loop to create models with 1-10 dense layers with 32-1024 nodes (node count doubled each iteration). It then prints the resulting accuracy sorted by nodecount, then layer count in ascending order. This data is used to generate the test values for the next script. 
 
 # EpochTester
 
