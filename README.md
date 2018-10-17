@@ -3,10 +3,15 @@ Deep learning project to differentiate between images of two different types of 
 
 # To use.
 Dependencies:
+
     - TensorFlow
+    
     - Numpy
+    
     - Matplotlib
+    
 Possible issues:
+
     - If using conda, input 'conda list' in the console. Check qt and pyqt versions. If they are 5.9.2 they need to be downgraded to 5.6. Use 'conda install pyqt=5.6'. If that doesn't work, do 'conda update -n base conda' and try again.
 
 Run main.py.
